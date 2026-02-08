@@ -9,7 +9,7 @@ X = []
 y = []
 labels = []
 
-# -------- Load all gesture files --------
+
 for idx, file in enumerate(os.listdir(DATA_DIR)):
     if file.endswith(".npy"):
         data = np.load(os.path.join(DATA_DIR, file))
@@ -23,12 +23,12 @@ y = np.array(y)
 print("Total samples:", len(X))
 print("Gestures:", labels)
 
-# -------- Train split --------
+
 X_train, X_val, y_train, y_val = train_test_split(
     X, y, test_size=0.2, stratify=y
 )
 
-# -------- Neural Network --------
+
 model = models.Sequential([
     layers.Input(shape=(63,)),
 
@@ -53,7 +53,7 @@ model.compile(
 
 model.summary()
 
-# -------- Train --------
+
 history = model.fit(
     X_train, y_train,
     validation_data=(X_val, y_val),
@@ -61,8 +61,9 @@ history = model.fit(
     batch_size=32
 )
 
-# -------- Save --------
+
 model.save("gesture_model.h5")
 np.save("labels.npy", labels)
 
 print("\nModel saved as gesture_model.h5")
+
