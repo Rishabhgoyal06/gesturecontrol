@@ -6,11 +6,11 @@ from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 import os
 
-# -------- Load model --------
+
 model = load_model("gesture_model.h5")
 labels = np.load("labels.npy", allow_pickle=True)
 
-# -------- MediaPipe setup --------
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "hand_landmarker.task")
 
@@ -68,3 +68,4 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+
