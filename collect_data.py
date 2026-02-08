@@ -5,7 +5,7 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-# ----------- FIXED MODEL PATH (IMPORTANT) -----------
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "hand_landmarker.task")
 
@@ -15,7 +15,7 @@ if not os.path.exists(MODEL_PATH):
     print(BASE_DIR)
     exit()
 
-# ----------- Gesture name -----------
+
 GESTURE_NAME = input("Enter gesture name: ")
 
 SAVE_DIR = os.path.join(BASE_DIR, "gesture_dataset")
@@ -23,7 +23,7 @@ os.makedirs(SAVE_DIR, exist_ok=True)
 
 file_path = os.path.join(SAVE_DIR, f"{GESTURE_NAME}.npy")
 
-# ----------- MediaPipe Setup -----------
+
 BaseOptions = python.BaseOptions
 HandLandmarker = vision.HandLandmarker
 HandLandmarkerOptions = vision.HandLandmarkerOptions
@@ -37,7 +37,7 @@ options = HandLandmarkerOptions(
 
 detector = HandLandmarker.create_from_options(options)
 
-# ----------- Webcam -----------
+
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)   # CAP_DSHOW prevents black camera on Windows
 
 data = []
@@ -57,11 +57,11 @@ while True:
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
 
-    # detect hand
+    
     result = detector.detect_for_video(mp_image, frame_id)
     frame_id += 1
 
-    # if hand detected
+    
     if result.hand_landmarks:
         hand = result.hand_landmarks[0]
 
@@ -69,7 +69,7 @@ while True:
         for lm in hand:
             landmark_list.extend([lm.x, lm.y, lm.z])
 
-        # draw points
+        
         h, w, _ = frame.shape
         for lm in hand:
             cx, cy = int(lm.x * w), int(lm.y * h)
@@ -81,7 +81,7 @@ while True:
             data.append(landmark_list)
             print("Captured:", len(data))
 
-    # display info
+    
     cv2.putText(frame,
                 f"Gesture: {GESTURE_NAME}  Samples: {len(data)}",
                 (10, 40),
@@ -102,3 +102,4 @@ cv2.destroyAllWindows()
 np.save(file_path, np.array(data))
 print(f"\n✅ Saved {len(data)} samples to:")
 print(file_path)
+
